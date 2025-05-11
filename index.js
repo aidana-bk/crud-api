@@ -47,6 +47,15 @@ app.post("/api/users", (req, res) => {
   res.status(201).json(newUser);
 });
 
+app.get("/api/users/:userId", (req, res) => {
+  const { userId } = req.params;
+  const user = users.find((u) => u.id === userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  res.status(200).json(user);
+});
+
 app.use((req, res) => {
   res.status(404).json({
     message: "The requested endpoint was not found",
