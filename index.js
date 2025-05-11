@@ -59,6 +59,28 @@ app.get("/api/users/:userId", (req, res) => {
   res.status(200).json(user);
 });
 
+app.put("/api/users/:userId", (req, res) => {
+  const { userId } = req.params;
+  if (!isUuid(userId)) {
+    return res.status(400).json({ message: "Invalid user ID format" });
+  }
+  const userIndx = users.findIndex((u) => u.id === userId);
+  if (userIndx === -1) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const { username, age, hobbies } = req.body;
+  if (!username || !age || !Array.isArray(hobbies)) {
+    return res.status(400).json({ message: "Invalid request body" });
+  }
+  users[userIndx] = {
+    ...users[userIndx],
+    username,
+    age,
+    hobbies,
+  };
+  res.status(200).json(users[userIndx]);
+});
+
 app.use((req, res) => {
   res.status(404).json({
     message: "The requested endpoint was not found",
