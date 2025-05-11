@@ -46,3 +46,9 @@ app.post("/api/users", (req, res) => {
   users.push(newUser);
   res.status(201).json(newUser);
 });
+
+app.use((req, res) => {
+  res.status(404).json({
+    message: "The requested endpoint was not found",
+  });
+});
