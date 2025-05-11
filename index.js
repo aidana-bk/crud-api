@@ -81,6 +81,19 @@ app.put("/api/users/:userId", (req, res) => {
   res.status(200).json(users[userIndx]);
 });
 
+app.delete("/api/users/:userId", (req, res) => {
+  const { userId } = req.params;
+  if (!isUuid(userId)) {
+    return res.status(400).json({ message: "Invalid user ID format" });
+  }
+  const userIndx = users.findIndex((u) => u.id === userId);
+  if (userIndx === -1) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  users.splice(userIndx, 1);
+  res.status(204).send();
+});
+
 app.use((req, res) => {
   res.status(404).json({
     message: "The requested endpoint was not found",
