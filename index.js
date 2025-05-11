@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, validate as isUuid } from "uuid";
 
 dotenv.config();
 
@@ -49,6 +49,9 @@ app.post("/api/users", (req, res) => {
 
 app.get("/api/users/:userId", (req, res) => {
   const { userId } = req.params;
+  if (!isUuid(userId)) {
+    return res.status(400).json({ message: "Invalid user ID format" });
+  }
   const user = users.find((u) => u.id === userId);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
