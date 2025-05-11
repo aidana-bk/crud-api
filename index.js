@@ -31,3 +31,18 @@ app.listen(PORT, () => {
 app.get("/api/users", (_, res) => {
   res.status(200).json(users);
 });
+
+app.post("/api/users", (req, res) => {
+  const { username, age, hobbies } = req.body;
+  if (!username || !age || !Array.isArray(hobbies)) {
+    return res.status(400).json({ message: "Invalid request body" });
+  }
+  const newUser = {
+    id: uuidv4(),
+    username,
+    age,
+    hobbies,
+  };
+  users.push(newUser);
+  res.status(201).json(newUser);
+});
